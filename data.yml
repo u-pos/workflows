@@ -5,6 +5,9 @@ on:
     - cron: "*/5 * * * *"   # 5分ごと
   workflow_dispatch:
 
+permissions:
+  contents: write   # ← data.json をコミットする権限
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,8 +24,7 @@ jobs:
         run: pip install yfinance pandas numpy
 
       - name: Generate data.json
-        run: |
-          python fetch_prices.py
+        run: python fetch_prices.py
 
       - name: Commit & push data.json
         run: |
