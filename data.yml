@@ -6,13 +6,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # ← data.json をコミットする権限
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       TZ: Asia/Tokyo
+      TWELVE_API_KEY: ${{ secrets.TWELVE_API_KEY }}   # ← ここで渡す
     steps:
       - uses: actions/checkout@v4
 
