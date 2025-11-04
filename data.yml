@@ -1,0 +1,33 @@
+name: Build data.json
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # 5分ごと
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Tokyo
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install yfinance pandas numpy
+
+      - name: Generate data.json
+        run: |
+          python fetch_prices.py
+
+      - name: Commit & push data.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "update data.json" || echo "no changes"
+          git push
